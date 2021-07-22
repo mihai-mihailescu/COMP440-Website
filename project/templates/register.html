@@ -22,7 +22,7 @@
 <div class = loginform>
     <form method="post" action="/register">
         <label><bold>Username(e-mail):</bold></label><br>
-        <input type="text" placeholder="Enter email" name="email" required><br><br>
+        <input type="email" placeholder="Enter email" name="email" required><br><br>
     
         <label><bold>First Name:</bold></label><br>
         <input type="text" placeholder="Enter first name" name="first_name" required><br><br>
@@ -31,15 +31,19 @@
         <input type="text" placeholder="Enter last name" name="last_name" required><br><br>
     
         <label><bold>Password:</bold></label><br>
-        <input type="password" placeholder= "Enter password" name="password" required><br>
+        <input id = "password" type="password" placeholder= "Password" name="password" required><br>
         <label class = "important">{{passwordMismatch}}</label><br><br>
      
         <label><bold>Confirm Password:</bold></label><br>
-        <input type="password" placeholder= "Confirm password" name="password_confirm" required><br>
+        <input id = "password_confirm" type="password" placeholder= "Confirm password" name="password_confirm" required><br>
         <label class = "important">{{passwordMismatch}}</label><br><br>
-    
+
         <input type="submit" value="Register">
     </form>
+
+
 </div>
+
+
 
 {% endblock %}

@@ -1,7 +1,7 @@
 Development Environment Setup
 Initial Setup
 
-git clone ...
+gh repo clone mihai-mihailescu/COMP440-Website
 
 Change active directory to
 	\COMP440 Website\project
@@ -34,5 +34,3 @@ cd "...\COMP440 Website\project"
 venv/Scripts/Activate
 $venv:FLASK_APP= "project"
 flask run
-
-

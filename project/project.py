@@ -94,9 +94,30 @@ def register():
     if request.method == 'POST':
         if request.form['password'] != request.form['password_confirm']:
             return render_template('register.html', passwordMismatch = "Passwords do not match", email=request.form['email'], first_name=request.form['first_name'], last_name=request.form['last_name'])
-        return "User registered"
+        
+        conn = connect()
+        try: 
+            cursor = conn.cursor()
+            query = "INSERT INTO credentials(email,password, first_name, last_name) VALUES(%s,%s,%s,%s)"
+            args = (request.form['email'], request.form['password'], request.form['first_name'], request.form['last_name'])
+            cursor.execute(query, args)
+            print("Attempting to add to table: ")
+            print(args)
 
-    error = "Field cannot be empty"
+            if cursor.lastrowid:
+                print("Successfully inserted id: ", cursor.lastrowid)
+                conn.commit()
+                return("Successfully registered user: %s", request.form['email'])
+
+        except Error as error:
+            print(error)
+            return("Error: {}".format(error))
+
+        finally:
+            cursor.close()
+            conn.close()
+            print('Connection closed.')    
+
     return render_template('register.html')
 
 @app.route("/logout")
