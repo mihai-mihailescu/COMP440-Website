@@ -1,0 +1,38 @@
+Development Environment Setup
+Initial Setup
+
+git clone ...
+
+Change active directory to
+	\COMP440 Website\project
+
+Start flask virtual environment command:
+	venv/Scripts/Activate
+then:
+	$venv:FLASK_APP= "project"
+
+Install python 3.0 mysql connector in venv:
+	pip3 install mysql-connector-python
+
+then run app:
+	flask run
+	
+to stop webserver use:
+	Ctrl+C
+
+To exit "venv" use command:
+	deactivate
+
+To enter python REPL use command:
+	py
+To exit python REPL use command
+	exit()
+	
+After initial setup:
+
+cd "...\COMP440 Website\project"
+venv/Scripts/Activate
+$venv:FLASK_APP= "project"
+flask run
+
+
