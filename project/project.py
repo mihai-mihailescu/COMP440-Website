@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import MySQLConnection, Error
+from mysql.connector.errors import IntegrityError
 from project_dbconfig import read_db_config
 from flask import Flask
 
@@ -38,13 +39,14 @@ def authorize(user, password):
         cursor = conn.cursor()
         query = "SELECT email FROM credentials WHERE email = %s AND password = %s"
         args = (user, password)
+        print("Authenticating(user,pass): ", format(args))
         cursor.execute(query, args)
         row = cursor.fetchone()
-        print("Authentication Query Result: ")
-        print(row)
+        print("Authentication Query Result:", format(row))
 
     except Error as error:
         print(error)
+        return("Error: {}".format(error))
 
     finally:
         cursor.close()
@@ -60,7 +62,7 @@ def index():
 @app.route("/home")
 def home():
     if 'username' in session:
-        return render_template('user.html', username=session['username'])
+        return redirect(url_for("user"))
     else:
         return render_template("home.html")
 
@@ -84,9 +86,28 @@ def login():
 @app.route("/user/<username>")
 def user(username=None):
     if 'username' in session:
-        return render_template('user.html', username=session['username'])
+        conn = connect()
+        row = None
+        try: 
+            cursor = conn.cursor()
+            query = "SELECT first_name, last_name, register_date FROM credentials WHERE email = %s"
+            args = (session['username'])
+            print("Retreiving data for: ", format(args))
+            cursor.execute(query, args)
+            row = cursor.fetchone()
+            print("Authentication Query Result:", format(row))
+
+        except Error as error:
+            print(error)
+            return("Error: {}".format(error))
+
+        finally:
+            cursor.close()
+            conn.close()
+            print('Connection closed.')
+            return render_template('user.html', username=session['username'], row=row)
     else:
-        return redirect(url_for(login))
+        return render_template("login.html", authError="Please log in")
 
 @app.route("/register", methods=['POST', 'GET'])
 def register():
@@ -101,14 +122,16 @@ def register():
             query = "INSERT INTO credentials(email,password, first_name, last_name) VALUES(%s,%s,%s,%s)"
             args = (request.form['email'], request.form['password'], request.form['first_name'], request.form['last_name'])
             cursor.execute(query, args)
-            print("Attempting to add to table: ")
-            print(args)
+            print("Attempting to add to table: ", format(args))
 
             if cursor.lastrowid:
                 print("Successfully inserted id: ", cursor.lastrowid)
                 conn.commit()
                 return("Successfully registered user: %s", request.form['email'])
 
+        except IntegrityError as error:
+            print(error)
+            return render_template("login.html", authError="Username/email already exists")
         except Error as error:
             print(error)
             return("Error: {}".format(error))

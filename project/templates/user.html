@@ -13,12 +13,16 @@
     <ul>
         <li><a  href="/home">Home</a></li>
         <li style="float:right"><a href="/logout">Logout</a></li>
-        <li style="float:right"><a class="active" href="/user/">{{username}}</a></li>
+        <li style="float:right"><a class="active" href="/user/">{{username[0]}}</a></li>
     </ul>
 </div>
 
-<h1>{{username}}'s Profile</h1>
+<h1>{{row[0]}}'s Profile</h1>
 
-<p>Here is the profile for {{username}}</p>
+<p>
+{% for val in row %}
+    {{val}}<br>
+{% endfor %}
+</p>
 
 {% endblock %}
