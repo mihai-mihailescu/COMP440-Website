@@ -127,11 +127,11 @@ def register():
             if cursor.lastrowid:
                 print("Successfully inserted id: ", cursor.lastrowid)
                 conn.commit()
-                return("Successfully registered user: %s", request.form['email'])
+                return("Successfully registered user: {}", request.form['email'])
 
         except IntegrityError as error:
             print(error)
-            return render_template("login.html", authError="Username/email already exists")
+            return render_template("register.html", error="Username/email already exists. Please login")
         except Error as error:
             print(error)
             return("Error: {}".format(error))

@@ -20,16 +20,16 @@
 </div>
 <h1>Login</h1>
 <div class = loginform>
-    <p class = "important">{{error}}</p>
+    <p style="text-align:center" class = "important">{{error}}</p>
     <form method="post" action="/register">
         <label><bold>Username(e-mail):</bold></label><br>
-        <input type="email" placeholder="Enter email" name="email" required><br><br>
+        <input type="email" placeholder="Enter email" name="email" value="{{email}}" required><br><br>
     
         <label><bold>First Name:</bold></label><br>
-        <input type="text" placeholder="Enter first name" name="first_name" required><br><br>
+        <input type="text" placeholder="Enter first name" name="first_name" value="{{first_name}}" required><br><br>
     
         <label><bold>Last Name:</bold></label><br>
-        <input type="text" placeholder="Enter last name" name="last_name" required><br><br>
+        <input type="text" placeholder="Enter last name" name="last_name" value="{{last_name}}" required><br><br>
     
         <label><bold>Password:</bold></label><br>
         <input id = "password" type="password" placeholder= "Password" name="password" required><br>
