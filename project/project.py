@@ -1,8 +1,9 @@
-import mysql.connector
 from mysql.connector import MySQLConnection, Error
 from mysql.connector.errors import IntegrityError
 from project_dbconfig import read_db_config
 from flask import Flask
+
+from datetime import datetime
 
 
 from flask import render_template
@@ -114,7 +115,7 @@ def register():
     error = ""
     if request.method == 'POST':
         if request.form['password'] != request.form['password_confirm']:
-            return render_template('register.html', passwordMismatch = "Passwords do not match", email=request.form['email'], first_name=request.form['first_name'], last_name=request.form['last_name'])
+            return render_template('register.html', show_reg_form = 1, passwordMismatch = "Passwords do not match", email=request.form['email'], first_name=request.form['first_name'], last_name=request.form['last_name'])
         
         conn = connect()
         try: 
@@ -127,11 +128,11 @@ def register():
             if cursor.lastrowid:
                 print("Successfully inserted id: ", cursor.lastrowid)
                 conn.commit()
-                return("Successfully registered user: {}", request.form['email'])
+                return render_template("register.html", show_reg_form = 0, email=request.form['email'], first_name=request.form['first_name'], last_name=request.form['last_name'], register_date=datetime.now())
 
         except IntegrityError as error:
             print(error)
-            return render_template("register.html", error="Username/email already exists. Please login")
+            return render_template("login.html", authError="Username/email already exists. Please login")
         except Error as error:
             print(error)
             return("Error: {}".format(error))
@@ -141,7 +142,7 @@ def register():
             conn.close()
             print('Connection closed.')    
 
-    return render_template('register.html')
+    return render_template('register.html', show_reg_form = 1)
 
 @app.route("/logout")
 def logout():

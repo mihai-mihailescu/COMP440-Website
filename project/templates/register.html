@@ -7,8 +7,10 @@
         color: tomato;
     }
 
-
-
+    .success{
+        text-align: center;
+        size: 16px;
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -18,7 +20,9 @@
         <li style="float:right"><a href="/login">Login</a></li>
     </ul>
 </div>
-<h1>Login</h1>
+
+{% if show_reg_form %}
+<h1>Register</h1>
 <div class = loginform>
     <p style="text-align:center" class = "important">{{error}}</p>
     <form method="post" action="/register">
@@ -41,10 +45,15 @@
 
         <input type="submit" value="Register">
     </form>
-
-
 </div>
-
-
-
+{% else %}
+<h1>Registration Successful</h1>
+<div class = loginform>
+    <p style="text-align:center; color: greenyellow">{{error}}</p>
+    <p>Registered email: {{email}}</p>
+    <p>First Name: {{first_name}}</p>
+    <p>Last Name: {{first_name}}</p>
+    <p>Registration Date and Time: {{register_date}}</p>
+</div>
+{% endif %}
 {% endblock %}

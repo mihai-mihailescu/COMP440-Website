@@ -6,10 +6,13 @@ gh repo clone mihai-mihailescu/COMP440-Website
 Change active directory to
 	\COMP440 Website\project
 
+Powershell policy
+Set-ExecutionPolicy RemoteSigned 
+
 Start flask virtual environment command:
 	venv/Scripts/Activate
 then:
-	$venv:FLASK_APP= "project"
+	$env:FLASK_APP= "project"
 
 Install python 3.0 mysql connector in venv:
 	pip3 install mysql-connector-python
@@ -32,5 +35,5 @@ After initial setup:
 
 cd "...\COMP440 Website\project"
 venv/Scripts/Activate
-$venv:FLASK_APP= "project"
+$env:FLASK_APP= "project"
 flask run
