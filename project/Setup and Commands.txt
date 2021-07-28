@@ -1,21 +1,22 @@
 Development Environment Setup
 Initial Setup
 
-git clone mihai-mihailescu/COMP440-Website
+git clone https://github.com/mihai-mihailescu/COMP440-Website.git
 
 Change active directory to
 	\COMP440 Website\project
 
 Powershell policy
-Set-ExecutionPolicy RemoteSigned 
+	Set-ExecutionPolicy RemoteSigned 
+
+Create a virtual environment
+	python3 -m venv venv
 
 Start flask virtual environment command:
 	venv/Scripts/Activate
-then:
-	$env:FLASK_APP= "project"
-
-Install python 3.0 mysql connector in venv:
+	pip install flask
 	pip3 install mysql-connector-python
+	$env:FLASK_APP= "project"
 
 then run app:
 	flask run

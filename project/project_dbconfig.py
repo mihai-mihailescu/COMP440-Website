@@ -7,6 +7,7 @@ def read_db_config(filename='config.ini', section='mysql'):
     :param section: section of database configuration
     :return: a dictionary of database parameters
     """
+    print("Looking for config.ini file")
     # create parser and read ini configuration file
     parser = ConfigParser()
     parser.read(filename)
