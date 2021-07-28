@@ -1,7 +1,7 @@
 Development Environment Setup
 Initial Setup
 
-gh repo clone mihai-mihailescu/COMP440-Website
+git clone mihai-mihailescu/COMP440-Website
 
 Change active directory to
 	\COMP440 Website\project

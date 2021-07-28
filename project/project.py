@@ -148,3 +148,11 @@ def register():
 def logout():
     session.pop('username',None)
     return redirect(url_for('index'))
+
+
+# run the app.
+if __name__ == "__main__":
+    # Setting debug to True enables debug output. This line should be
+    # removed before deploying a production app.
+    app.debug = True
+    app.run()
