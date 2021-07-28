@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="navbar">
+    <ul>
+        <li><a class="active" href="/home">Home</a></li>
+        <li style="float:right"><a href="/login">Login</a></li>
+    </ul>
+</div>
+
+<h1>COMP440 Project Home</h1>
+
+<p>Welcome to Michelle and Mihai's COMP 440 Project. Please login to continue</p>
+
+<P>Try to acces this <a href="/user">user</a> page without logging in.</P>
+{% endblock %}

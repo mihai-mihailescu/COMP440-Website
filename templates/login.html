@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: tomato;
+    }
+
+    label{
+        size:50%;
+    }
+
+</style>
+{% endblock %}
+{% block content %}
+
+<div id="navbar">
+    <ul>
+        <li><a href="/home">Home</a></li>
+        <li style="float:right"><a class="active" href="/login">Login</a></li>
+    </ul>
+</div>
+<h1>Login</h1>
+<div class="loginform">
+    <p style="text-align:center" class = "important">{{authError}}</p>
+    <form method="post" action="/login">
+
+        <label><b>Username:</b></label><br>
+        <input type="text" name="username"><br><br>
+
+        <label><b>Password:</b></label><br>
+        <input type="password" name="password"><br><br>
+
+        <input type="submit" value="Login">
+        <input style="float:right; background-color: #046daa" type="submit" value="Register" formmethod = "GET" formaction="/register">
+    </form>
+
+</div>
+{% endblock %}

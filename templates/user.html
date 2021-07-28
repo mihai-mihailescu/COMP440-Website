@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="navbar">
+    <ul>
+        <li><a  href="/home">Home</a></li>
+        <li style="float:right"><a href="/logout">Logout</a></li>
+        <li style="float:right"><a class="active" href="/user/">{{username[0]}}</a></li>
+    </ul>
+</div>
+
+<h1>{{row[0]}}'s Profile</h1>
+
+<p>
+{% for val in row %}
+    {{val}}<br>
+{% endfor %}
+</p>
+
+{% endblock %}
