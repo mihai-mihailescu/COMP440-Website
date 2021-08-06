@@ -2,11 +2,89 @@
 {% block title %}Home{% endblock %}
 {% block head %}
 {{ super() }}
-<style type="text/css">
-    .important {
-        color: #336699;
-    }
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header */
+.header {
+  grid-area: header;
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 35px;
+}
+
+/* The grid container */
+.grid-container {
+  display: grid;
+  grid-template-areas: 
+    'header header header header header header' 
+    'left middle middle middle middle right' 
+    'footer footer footer footer footer footer';
+  /* grid-column-gap: 10px; - if you want gap between the columns */
+} 
+
+.left,
+.middle,
+.right {
+  padding: 10px;
+  /*height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Style the left column */
+.left {
+  grid-area: left;
+  padding:10px;
+  height:200px;
+}
+
+/* Style the middle column */
+.middle {
+  grid-area: middle;
+}
+
+/* Style the right column */
+.right {
+  grid-area: right;
+  height:100px;
+}
+
+/* Style the footer */
+.footer {
+  grid-area: footer;
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.blogcard{
+    margin: 0px 5px 10px 5px;
+    padding: 5px;
+    background-color: rgb(255, 219, 152);
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media (max-width: 600px) {
+  .grid-container  {
+    grid-template-areas: 
+      'header header header header header header' 
+      'left left left left left left' 
+      'middle middle middle middle middle middle' 
+      'right right right right right right' 
+      'footer footer footer footer footer footer';
+  }
+}
 </style>
+
 {% endblock %}
 {% block content %}
 <div id="navbar">
@@ -16,9 +94,38 @@
     </ul>
 </div>
 
-<h1>COMP440 Project Home</h1>
+<div class = "grid-container">
+    <div class ="header">
+        <h2>Blog Category</h2>
+    </div>
+    <div class = "left" style="background-color: lightblue ;">
+        Different Categories
+    </div>
+    <div class="middle" style="background-color:white;">
+        {% for blog in blogs %}
+            <div class ="blogcard">
+                <h3><a href = "/blog?blogid={{blog[0]}}">{{blog[1]}}</a></h3>
+                {{blog[2]}}
+                <P>Author: {{blog[4]}} Posted on: {{blog[3]}}</P>
+            </div>
+        {% endfor %}
 
-<p>Welcome to Michelle and Mihai's COMP 440 Project. Please login to continue</p>
+        <div class ="blogcard">
+            <h3>Blog title</h3>
+            pdate username
+            <p>stuff</p>
+        </div>
+    </div>  
+    <div class="right" style="background-color: lightgoldenrodyellow;">
+        User info could maybe go here
+    </div>
 
-<P>Try to acces this <a href="/user">user</a> page without logging in.</P>
+    
+    <div class="footer">
+      <p>End of blogs</p>
+    </div>
+</div>
+
+
+<P>Try to access this <a href="/user">user</a> page without logging in.</P>
 {% endblock %}
