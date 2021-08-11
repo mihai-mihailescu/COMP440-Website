@@ -74,6 +74,35 @@
         border: 3px solid black;
         border-radius: 5px;
     }
+
+    .newblogpost{
+      background-color: #046daa;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      padding: 16px 32px;
+      text-decoration: none;
+      margin: 4px 2px;
+      cursor:pointer;
+      float:left;
+    }
+
+    .newblogpost:hover{
+        opacity: 0.8
+    }
+
+    .tagslist ul{
+      list-style: square;
+      margin: initial;
+      padding: 0 0 0 40px;
+      background-color: rgb(255, 219, 152);
+    }
+
+    .tagslist li{
+      display: list-item;
+      clear: both;
+    }
+
     
     /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
     @media (max-width: 600px) {
@@ -101,12 +130,52 @@
     <div class ="header">
         <h2>{{row[0]}}'s Profile</h2>
     </div>
+    
     <div class = "left" style="background-color: lightblue ;">
         Different Categories
     </div>
     <div class="middle" style="background-color:white;">
-        <div class = "blogcard">
+        <div class = "blogcard" style = "padding-bottom: 50x; padding-top: 0px;">
+          <button class ="newblogpost" onclick= "new_blog_post()">New Post</button><br><br><br>
+          
+          <!--Should probably redo this to use more of jinra. Currently, if the required fields are completed, adding to the tags list will submit the form???why-->
+          <form id="new_blog_form" method = "post" action = "/user/newblogpost" hidden>
+            <label><bold>Subject:</bold></label><br>
+            <input type="text" placeholder="Enter subject" name="subject" value="{{subject}}" maxlength="50" required>
+            <label><bold>Description:</bold></label><br>
+            <input type="text" placeholder="Enter description" name="description" value="{{description}}" maxlength="250" required><br> 
+            <label><bold>Tags:</bold></label>
+            <input type="text" placeholder="Enter tags" id = "blogtag" name="blogstags" style = "width: 75%;" value="{{blogstags}}"><button class = "text" style = "padding: 12px 20px;" onclick="add_tag()">+</button>
             
+            <div class = "tagslist">
+              <tagslist>
+                <ul id = "tags">
+                </ul>
+              </tagslist>
+            </div>
+
+            <input type = "submit" style = "margin:0px" value = "Post Blog">
+            <form>
+
+          <script>
+             function add_tag(){
+              var node = document.createElement("LI");                 // Create a <li> node
+              var textnode = document.createTextNode(document.getElementById("blogtag").value);         // Create a text node
+              node.appendChild(textnode);                              // Append the text to <li>
+              document.getElementById("tags").appendChild(node);     // Append <li> to <ul> with id="myList"
+             }
+
+            function new_blog_post(){
+              var x = document.getElementById("new_blog_form");
+
+              if(x.hidden == false)
+                x.hidden = true
+              else
+                x.hidden = false
+                
+              return;
+            }
+          </script>
         </div>
         {% for blog in blogs %}
             <div class ="blogcard">

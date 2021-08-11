@@ -127,9 +127,6 @@ def blogcontent():
         print('Connection closed.')
         return render_template("blogview.html", blog=blog, comments = comments, tags = tags)
 
-
-
-
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     error = ""
@@ -145,9 +142,9 @@ def login():
     # was GET or the credentials were invalid
     return render_template('login.html', authError=error)
 
-
 @app.route("/user/")
 @app.route("/user/<username>")
+@app.route("/user/newblogpost", methods = ['POST','GET'])
 def user(username=None):
     if 'username' in session:
         conn = connect()
@@ -168,7 +165,14 @@ def user(username=None):
             blogs = cursor.fetchall()
             print("Query Result: ", format(blogs))
 
-
+            if(request.method == 'POST'):
+                subject = request.form['subject']
+                description = request.form['description']
+                tags = request.form['tags']
+                print(subject)
+                print(description)
+                print(tags)
+                
 
         except Error as error:
             print(error)
