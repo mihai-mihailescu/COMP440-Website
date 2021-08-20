@@ -72,6 +72,16 @@ body {
     border-radius: 5px;
 }
 
+.isa_error {
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+.isa_info i, .isa_success i, .isa_warning i, .isa_error i {
+    margin:10px 22px;
+    font-size:2em;
+    vertical-align:middle;
+}
+
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
 @media (max-width: 600px) {
   .grid-container  {
@@ -96,7 +106,7 @@ body {
 
 <div class = "grid-container">
     <div class ="header">
-        <h2>Blog Subject Goes Here</h2>
+        <h2>Beehive!</h2>
     </div>
     <div class = "left" style="background-color: lightblue ;">
         <p style="text-align: center;">Blog Tags</p>
@@ -111,11 +121,33 @@ body {
           <p>Author: {{blog[4]}} Posted on: {{blog[3]}}</p>
         </div>
 
+        <div class = "blogcard">
+          <h3>Post New Comment</h3>
+
+            {% for message in get_flashed_messages() %}
+
+            <div class="isa_error">
+              <i class="fa fa-times-circle"></i>
+              {{ message }}  
+            </div>
+            {% endfor %}
+          <form id = "new_comment_form" method = "post" action = "/blog/newcomment/?blogid={{blog[0]}}">
+            <textarea type ="text" id = "description" name = "description" rows = "4" cols = "75" placeholder = "Enter comment" maxlength = "250" required></textarea><br>
+            <label for = "sentiment"><bold>Sentiment:</bold></label>
+            <select name = "sentiment" id = "sentiment">
+              <option value = "positive">Positive</option>
+              <option value = "negative">Negative</option>
+            </select>
+            <p></p>
+            <input type = "submit" style = "margin:0px;" value = "Submit">
+          </form>
+        </div>
+
         <p>Comments</p>
         {% for comment in comments %}
         <div class ="blogcard">
             <h3>{{comment[5]}}</h3>
-            Author: {{comment[4]}}
+            Author: {{comment[4]}}<br>
             sentiment: {{comment[1]}}
             <P>{{comment[2]}}</P>
             <p>{{comment[3]}}</p>

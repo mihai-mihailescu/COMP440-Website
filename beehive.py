@@ -3,11 +3,12 @@ from mysql.connector.errors import IntegrityError
 from project_dbconfig import read_db_config
 from flask import Flask
 
-from datetime import datetime
+from datetime import date
 
 
 from flask import render_template
 from flask import abort, redirect, url_for
+from flask import flash
 from flask import request, session
 
 app = Flask(__name__)
@@ -38,7 +39,7 @@ def authorize(user, password):
     row = None
     try: 
         cursor = conn.cursor()
-        query = "SELECT username FROM users WHERE username = %s AND password = %s"
+        query = "SELECT username,userid FROM users WHERE username = %s AND password = %s"
         args = (user, password)
         print("Authenticating(user,pass): ", format(args))
         cursor.execute(query, args)
@@ -127,6 +128,50 @@ def blogcontent():
         print('Connection closed.')
         return render_template("blogview.html", blog=blog, comments = comments, tags = tags)
 
+@app.route("/blog/newcomment/", methods = ['POST', 'GET'])
+def newcomment():
+    conn = connect()
+    #RULES:
+    #1) USER MUST BE LOGGED IN TO POST A COMMENT
+    #2) USER CAN POST AT MOST 1 COMMENT FOR A BLOG
+    #3) USER CANNOT COMMENT ON THEIR OWN BLOG
+    if request.method == "POST":
+        if "username" in session:
+            #If logged in
+            query = "SELECT userid FROM blogs WHERE blogid = %s"
+            args = (request.args.get("blogid"),)
+            cursor = conn.cursor()
+            cursor.execute(query,args)
+            blogauthor = cursor.fetchone()
+            #Satisfies Rule #3
+            if blogauthor[0] == session['userid']:
+                #Check if logged in user is the author of the blog
+                flash("Can't commment on your own blog!")
+                return redirect("/blog/?blogid="+request.args.get("blogid")) 
+            else:
+                #Check if user has already commented on the blog
+                query = "SELECT commentid FROM comments where authorid = %s AND blogid = %s"
+                args = (session['userid'], request.args.get("blogid"))
+                cursor.execute(query,args)
+                commentlimit = cursor.fetchone()
+                if commentlimit is None:
+                    #Post the comment
+                    query = "INSERT INTO comments(sentiment,description,cdate,blogid,authorid) VALUES (%s,%s,%s,%s,%s)"
+                    args = (request.form['sentiment'],request.form['description'], date.today().strftime("%Y-%m-%d"), request.args.get("blogid"), session['userid'])
+                    print("Inserting comment: {}".format(args))
+                    cursor.execute(query,args)
+                    if cursor.lastrowid:
+                        print("Successfully inserted comment: ", cursor.lastrowid)
+                        conn.commit()
+                        return redirect("/blog/?blogid="+request.args.get("blogid"))
+                else:
+                    #Already commented on this blog
+                    flash("You've already commented on this blog")
+                    return redirect("/blog/?blogid="+request.args.get("blogid"))
+
+        else:
+            return render_template("login.html",authError = "Please log in before you comment")
+
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     error = ""
@@ -134,7 +179,8 @@ def login():
     if request.method == 'POST':
         user = authorize(request.form['username'], request.form['password'])
         if user is not None:
-            session['username'] = user
+            session['username'] = user[0]
+            session['userid'] = user[1]
             return redirect("/user/"+user[0])
         else:
             error = 'Invalid username/password'
@@ -153,7 +199,7 @@ def user(username=None):
         try: 
             cursor = conn.cursor()
             query = "SELECT username, email FROM users WHERE username = %s"
-            args = (session['username'])
+            args = (session['username'],)
             print("Retreiving data for: ", format(args))
             cursor.execute(query, args)
             row = cursor.fetchone()
@@ -172,6 +218,7 @@ def user(username=None):
                 print(subject)
                 print(description)
                 print(tags)
+                #############################FINISH THIS THING#######################
                 
 
         except Error as error:
