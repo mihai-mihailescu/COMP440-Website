@@ -4,6 +4,7 @@ from project_dbconfig import read_db_config
 from flask import Flask
 
 from datetime import date
+from datetime import datetime
 
 
 from flask import render_template
@@ -13,7 +14,6 @@ from flask import request, session
 
 app = Flask(__name__)
 app.secret_key = b'\x93\xf3\xb2x\x81s\xd9.\x856iY\xd6\xf1;\xad'
-
 
 def connect():
     """ Connect to MySQL database """
@@ -72,7 +72,7 @@ def home():
     #Before logging in we display all the blogs if any are available
     conn = connect()
     blogs = None
-
+    
     try:
         cursor = conn.cursor()
         query = "SELECT blogid,subject,description,pdate,username FROM blogs INNER JOIN users ON users.userid = blogs.userid"
@@ -90,7 +90,7 @@ def home():
         conn.close()
         print('Connection closed.')
         return render_template('home.html', blogs = blogs)
-    
+
 @app.route("/blog/")
 def blogcontent():
     conn = connect()
@@ -146,7 +146,7 @@ def newcomment():
             #Satisfies Rule #3
             if blogauthor[0] == session['userid']:
                 #Check if logged in user is the author of the blog
-                flash("Can't commment on your own blog!")
+                flash("Cannot commment on your own blog!")
                 return redirect("/blog/?blogid="+request.args.get("blogid")) 
             else:
                 #Check if user has already commented on the blog
@@ -188,19 +188,153 @@ def login():
     # was GET or the credentials were invalid
     return render_template('login.html', authError=error)
 
+@app.route("/queries/")
+def queries():
+    return render_template('queries.html')
+
+@app.route("/displayUsers/")
+def displayUsers():
+
+    conn = connect()
+    try:
+        cursor = conn.cursor()
+        query = "SELECT * from blogs where blogid NOT in (SELECT distinct blogid from comments where comments.sentiment = 'negative')"
+        cursor.execute(query)
+        users = cursor.fetchall()
+        
+    except Error as error:
+        print(error)
+        return("Error: {}".format(error))
+    
+    finally:
+        cursor.close()
+        conn.close()
+        print('Connection closed.')
+        return render_template('displayUsers.html', blogs = users)
+        
+@app.route("/blogcontaintag", methods = ['POST', 'GET'])
+def blogcontaintag():
+    conn = connect()
+    blogid = None
+    if request.method == 'POST':
+        try:
+            ### get tag input ###
+            cursor = conn.cursor()
+            query = "SELECT blogid FROM blogstags where tag = %s" 
+            args = (request.form['blogstag'],)
+            cursor.execute(query,args)
+            print("Blogstag: ", format(args))
+
+        
+            #### fetch tag ####
+            blogid = cursor.fetchall()
+            print("Blogid: ", format(blogid))
+            
+        except Error as error:
+            print(error)
+            return("Error: {}".format(error))
+        
+        finally:
+            cursor.close()
+            conn.close()
+            print('Connection closed.')
+            return render_template('blogcontaintag.html', blogid = blogid, blogstags = request.form['blogstag'])
+    else:
+        return redirect ('/queries')
+
+@app.route("/usersnevercomment/")
+def usersnevercomment():
+    conn = connect()
+    userid = None
+    try:
+        cursor = conn.cursor()
+        query = "select userid from users where userid NOT in (select distinct authorid from comments)"
+        cursor.execute(query)
+        userid = cursor.fetchall()
+        
+    except Error as error:
+        print(error)
+        return("Error: {}".format(error))
+    
+    finally:
+        cursor.close()
+        conn.close()
+        print('Connection closed.')
+        return render_template('usersnevercomment.html', userid = userid)
+
+########################################### FIX THISSSS###########################################################
+
+@app.route("/dateUsers/")
+def dateUsers():
+    conn = connect()
+    userid = None
+  
+    try:
+        ##### Get date from user input#######
+        cursor = conn.cursor()
+
+        ##### query by date#########
+        query = "select distinct userid from blogs where pdate = '2021-08-25' Having Max(blogid)"
+        cursor.execute(query)
+        userid = cursor.fetchall()
+
+    except Error as error:
+        print(error)
+        return("Error: {}".format(error))
+    
+    finally:
+        cursor.close()
+        conn.close()
+        print('Connection closed.')
+        return render_template('dateUsers.html', userid = userid)
+    
+# @app.route("/listFollowedUsers", methods = ['POST','GET'])
+# def listFollowedUsers():
+    conn = connect()
+    leaderid = None
+    if request.method == 'POST':
+        try:
+            ### get followers input ###
+            cursor = conn.cursor()
+            query = "select distinct leaderid from follows where followerid = %s AND leaderid in ( select leaderid from follows where followerid = %s)" 
+            args = (request.form['followerid', 'followerid'])
+            cursor.execute(query,args)
+            print("Followerid: ", format(args))
+
+        
+            #### fetch tag ####
+            leaderid = cursor.fetchall()
+            print("Leaderid: ", format(leaderid))
+            
+        except Error as error:
+            print(error)
+            return("Error: {}".format(error))
+        
+        finally:
+            cursor.close()
+            conn.close()
+            print('Connection closed.')
+            return render_template('blogcontaintag.html', leaderid = leaderid, followerid = request.form['followerid', 'followerid'])
+    else:
+        return redirect ('/queries')
+
+
+################################################################################################################
+
+
 @app.route("/user/")
 @app.route("/user/<username>")
-@app.route("/user/newblogpost", methods = ['POST','GET'])
 def user(username=None):
     if 'username' in session:
         conn = connect()
         row = None
         blogs = None
+        cursor = conn.cursor()
+
         try: 
-            cursor = conn.cursor()
             query = "SELECT username, email FROM users WHERE username = %s"
             args = (session['username'],)
-            print("Retreiving data for: ", format(args))
+            print("Retrieving data for: ", format(args))
             cursor.execute(query, args)
             row = cursor.fetchone()
             print("Authentication Query Result:", format(row))
@@ -210,16 +344,6 @@ def user(username=None):
             cursor.execute(query,args)
             blogs = cursor.fetchall()
             print("Query Result: ", format(blogs))
-
-            if(request.method == 'POST'):
-                subject = request.form['subject']
-                description = request.form['description']
-                tags = request.form['tags']
-                print(subject)
-                print(description)
-                print(tags)
-                #############################FINISH THIS THING#######################
-                
 
         except Error as error:
             print(error)
@@ -233,6 +357,61 @@ def user(username=None):
     else:
         return render_template("login.html", authError="Please log in")
 
+
+@app.route("/user/newblogpost", methods = ['POST','GET'])
+def newblogpost():
+    if 'username' in session:
+        conn = connect()
+        count = None
+        try:
+            cursor = conn.cursor()
+            query = "SELECT count(pdate) from blogs where userid = %s AND pdate = %s"
+            args = (session['userid'], date.today().strftime("%Y-%m-%d"))
+            print("Retreiving data for: ", format(args))
+            cursor.execute(query, args)
+            count = cursor.fetchone()
+            print("Authentication Query Result:", format(count))
+
+            if count[0] != 2:
+                #Allowed to blog post
+                #Get next blogid
+                query = "SELECT MAX(blogid) FROM blogs"
+                cursor.execute(query)
+                blogid = cursor.fetchone()
+                blogid = blogid[0] + 1
+                print("New blogid: ", blogid)
+                subject = request.form["subject"]
+                description = request.form["description"]
+                #Insert blog
+                query = "INSERT INTO blogs(blogid,subject,description,pdate,userid) VALUES (%s,%s,%s,%s,%s)"
+                args = (blogid,subject,description,date.today().strftime("%Y-%m-%d"),session['userid'])
+                cursor.execute(query,args)
+                print("Inserted blog at ", cursor.lastrowid)
+
+                tags = request.form["blogstags"].split(";")
+                #Set up taginsert
+                blogidlist = [blogid]*len(tags)
+                tags = list(zip(blogidlist,tags))
+                query = "INSERT INTO blogstags(blogid,tag) VALUES(%s,%s)"
+                cursor.executemany(query,tags)
+                print("Inserted tags at ", cursor.lastrowid)
+                conn.commit()
+            else:
+                return "Maximum of 2 blogs per day"
+
+        except Error as error:
+            print(error)
+            return("Error: {}".format(error))
+
+        finally:
+            cursor.close()
+            conn.close()
+            print('Connection closed.')
+            return redirect("/user/"+session['username'])
+    else:
+        return render_template("login.html", authError="Please log in")
+
+       
 @app.route("/register", methods=['POST', 'GET'])
 def register():
     error = ""
