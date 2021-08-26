@@ -219,7 +219,8 @@ def displayUsers():
             print('Connection closed.')
             return render_template('displayUsers.html', blogid = blogid, userid = request.form['userid'])
     else:
-        return redirect ('/queries')    
+        return redirect ('/queries')   
+
 @app.route("/blogcontaintag", methods = ['POST', 'GET'])
 def blogcontaintag():
     conn = connect()
@@ -233,7 +234,6 @@ def blogcontaintag():
             cursor.execute(query,args)
             print("Blogstag: ", format(args))
 
-        
             #### fetch tag ####
             blogid = cursor.fetchall()
             print("Blogid: ", format(blogid))
@@ -320,7 +320,7 @@ def listFollowedUsers():
             cursor.close()
             conn.close()
             print('Connection closed.')
-            return render_template('listFollowedUsers.html', leaderid = leaderid)
+            return render_template('listFollowedUsers.html', leaderid = leaderid, followerid_1= request.form['followerid_1'], followerid_2 = request.form['followerid_2'])
     else:
         return redirect ('/queries')
 
@@ -358,7 +358,6 @@ def user(username=None):
             return render_template('user.html', username=session['username'], row=row, blogs=blogs)
     else:
         return render_template("login.html", authError="Please log in")
-
 
 @app.route("/user/newblogpost", methods = ['POST','GET'])
 def newblogpost():
@@ -412,7 +411,6 @@ def newblogpost():
             return redirect("/user/"+session['username'])
     else:
         return render_template("login.html", authError="Please log in")
-
        
 @app.route("/register", methods=['POST', 'GET'])
 def register():
@@ -452,7 +450,6 @@ def register():
 def logout():
     session.pop('username',None)
     return redirect(url_for('index'))
-
 
 # run the app.
 if __name__ == "__main__":
