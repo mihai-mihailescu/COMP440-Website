@@ -111,10 +111,13 @@ body{overflow:hidden}
 {% block content %}
 
 <br><br>
-<div><h1>100% Positive Comments Only Blogs</h1>
-{% for x in blogs %}
-<p><b>{{x[0]}}</b> {{x[1]}} :::: {{x[5]}} <b>{{x[6]}}</b> {{x[7]}}</p>
+
+
+<h3>List all the blogs of user "{{userid}}", such that all the comments are positive for these blogs.
+: </h3>
+<div>
+{% for x in blogid %}
+<p><b> {{x[0]}}</b> </p>
 {% endfor %}
 </div>
-
 {% endblock %}

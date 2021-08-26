@@ -1,6 +1,5 @@
-{% extends "layout.html" %}
-{% block head %}
-{{ super() }}
+
+<br>
 <!--______________________________bee wallpaper_________________________________________-->
 <style>
     body{
@@ -105,15 +104,23 @@ body{overflow:hidden}
 	<div class="body"></div>
 </div>
 <!--______________________________bee wallpaper_________________________________________-->
-{% endblock %}
-{% block content %}
 
-<br><br>
+
+<!-- <br><br>
 <div class="mb-3">
     <label for="displayUsers" class="form-label"><h3>List all the blogs, such that all the comments are positive for these blogs.</h3></label>
 <a class="btn btn-primary" href="/displayUsers/" role="button">Display Users</a> <br><br>
-</div>
-<br>
+</div> -->
+
+<p><h1><b><em><u>~Welcome to Phase 3~</em></b></u></h1>
+<div>
+	<form method="post" action="/displayUsers">
+		<label><h3><bold>Enter User:</bold></h3></label>
+		<input type="text" placeholder="Enter Userid" name="userid" required><br><br>
+		<input type="submit" value="Submit">
+	</form>
+	</div>
+	<br>
 <div>
 	<h3>List the users who posted the most number of blogs on 2021-08-25:</h3>
 	<div>
@@ -124,27 +131,26 @@ body{overflow:hidden}
 <div>
 <h3>Display users who never commented</h3>
 <a class="btn btn-primary" href="/usersnevercomment/" role="button">Display Users</a> <br></div>
-
+<br><br>
 <div>
 <form method="post" action="/blogcontaintag">
-    <label><h3><bold>Enter Tags:</bold></h3></label>
-    <input type="text" placeholder="Enter tag" name="blogstag" required><br><br>
-    <input type="submit" value="submit">
+    <p><h3><bold>Enter Tags:</bold></h3>
+    <input type="text" placeholder="Enter tag" name="blogstag" required></p>
+    <input type="submit" value="Submit">
 </form>
 </div>
 <br><br>
 
-<!-- 
+
 <div>
 	<form method="post" action="/listFollowedUsers">
-		<label><h3><bold>Enter Follower #1:</bold></h3></label>
-		<input type="text" placeholder="Enter Follower #1" name="follower1" required><br><br>
+		<p><h3><bold>Enter Follower #1:</bold></h3>
+		<input type="text" placeholder="Enter Follower #1" name="followerid_1" required></p>
 
-		<label><h3><bold>Enter Follower #2:</bold></h3></label>
-		<input type="text" placeholder="Enter Follower #2" name="follower2" required><br><br>
+		<p><h3><bold>Enter Follower #2:</bold></h3>
+		<input type="text" placeholder="Enter Follower #2" name="followerid_2" required></p> 
 	
-		<input type="submit" value="submit">
+		<p><input type="submit" value="Submit"></p>
 	</form>
-	</div> -->
-
-{% endblock %}
+	</div>
+</p>

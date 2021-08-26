@@ -192,26 +192,34 @@ def login():
 def queries():
     return render_template('queries.html')
 
-@app.route("/displayUsers/")
+@app.route("/displayUsers", methods = ['POST', 'GET'])
 def displayUsers():
 
     conn = connect()
-    try:
-        cursor = conn.cursor()
-        query = "SELECT * from blogs where blogid NOT in (SELECT distinct blogid from comments where comments.sentiment = 'negative')"
-        cursor.execute(query)
-        users = cursor.fetchall()
+    blogid = None
+    if request.method == 'POST':
+        try:
+            cursor = conn.cursor()
+            query = "SELECT * from blogs where userid = %s and blogid NOT in (SELECT distinct blogid from comments where sentiment = 'negative')"
+            args = (request.form['userid'],)
+            cursor.execute(query,args)
+            print("Userid: ", format(args))
+            
+            #### fetch blog title ####
+            blogid = cursor.fetchall()
+            print("Title: ", format(blogid))
+
+        except Error as error:
+            print(error)
+            return("Error: {}".format(error))
         
-    except Error as error:
-        print(error)
-        return("Error: {}".format(error))
-    
-    finally:
-        cursor.close()
-        conn.close()
-        print('Connection closed.')
-        return render_template('displayUsers.html', blogs = users)
-        
+        finally:
+            cursor.close()
+            conn.close()
+            print('Connection closed.')
+            return render_template('displayUsers.html', blogid = blogid, userid = request.form['userid'])
+    else:
+        return redirect ('/queries')    
 @app.route("/blogcontaintag", methods = ['POST', 'GET'])
 def blogcontaintag():
     conn = connect()
@@ -262,8 +270,6 @@ def usersnevercomment():
         print('Connection closed.')
         return render_template('usersnevercomment.html', userid = userid)
 
-########################################### FIX THISSSS###########################################################
-
 @app.route("/dateUsers/")
 def dateUsers():
     conn = connect()
@@ -288,20 +294,20 @@ def dateUsers():
         print('Connection closed.')
         return render_template('dateUsers.html', userid = userid)
     
-# @app.route("/listFollowedUsers", methods = ['POST','GET'])
-# def listFollowedUsers():
+@app.route("/listFollowedUsers", methods = ['POST','GET'])
+def listFollowedUsers():
     conn = connect()
     leaderid = None
+    followerid_1 = None
+    followerid_2 = None
     if request.method == 'POST':
         try:
             ### get followers input ###
             cursor = conn.cursor()
             query = "select distinct leaderid from follows where followerid = %s AND leaderid in ( select leaderid from follows where followerid = %s)" 
-            args = (request.form['followerid', 'followerid'])
-            cursor.execute(query,args)
-            print("Followerid: ", format(args))
+            args = (request.form['followerid_1'], request.form['followerid_2'])
+            cursor.execute(query, args)
 
-        
             #### fetch tag ####
             leaderid = cursor.fetchall()
             print("Leaderid: ", format(leaderid))
@@ -314,13 +320,9 @@ def dateUsers():
             cursor.close()
             conn.close()
             print('Connection closed.')
-            return render_template('blogcontaintag.html', leaderid = leaderid, followerid = request.form['followerid', 'followerid'])
+            return render_template('listFollowedUsers.html', leaderid = leaderid)
     else:
         return redirect ('/queries')
-
-
-################################################################################################################
-
 
 @app.route("/user/")
 @app.route("/user/<username>")
