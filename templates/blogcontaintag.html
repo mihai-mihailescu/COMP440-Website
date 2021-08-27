@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+<head>
+ <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{% block title %}{% endblock %} - COMP440 Project</title>
+    {% endblock %}
+
+</head>
+
+<!--______________________________bee wallpaper_________________________________________-->
+<style>
+    body{
+	margin:0;
+	color:#444;
+	background:#f3c444;
+	font:300 18px/18px Roboto, sans-serif;
+}
+*,:after,:before{box-sizing:border-box}
+.pull-left{float:left}
+.pull-right{float:right}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+body{overflow:hidden}
+.bee{
+	top:50%;
+	left:50%;
+	margin:auto;
+	width:120px;
+	height:120px;
+	margin-top:-20px;
+	margin-left:-60px;
+	position:absolute;
+}
+.bee:before,
+.bee:after{
+	top:-30px;
+	width:12px;
+	height:12px;
+	content:'';
+	border-radius:50%;
+	position:absolute;
+	border:6px solid currentColor;
+	animation:eye 1s linear infinite;
+}
+.bee:before{left:45px}
+.bee:after{right:45px}
+.bee .body{
+	padding:10px;
+}
+.bee .body,.bee .body:before{
+	display:inline-block;
+	border:24px double transparent;
+	border-top-color:currentColor;
+	border-radius:50%;
+}
+.bee .body:before{
+	width:0;
+	height:0;
+	content:'';
+}
+.bee .wings{
+	top:-35px;
+	width:100%;
+	height:70px;
+	position:absolute;
+	animation:wing 1s linear infinite;
+}
+.bee .wings:before,
+.bee .wings:after{
+	top:50%;
+	content:'';
+	width:50px;
+	height:50px;
+	margin-top:-25px;
+	position:absolute;
+	border-radius:50%;
+	background-color:rgba(255,255,255,.65);
+}
+.bee .wings:before{
+	left:0;
+	transform:rotate(-45deg);
+	border-radius:50% 50% 0 50%;
+}
+.bee .wings:after{
+	right:0;
+	transform:rotate(45deg);
+	border-radius:50% 50% 50% 0;
+}
+@keyframes eye{
+	0%,50%,62.5%,87.5%{
+		transform:rotateX(0deg);
+	}
+	51%,63%,75%,100%{
+		transform:rotateX(90deg);
+	}
+}
+@keyframes wing{
+	0%,75%,100%{
+		transform:rotate(0deg);
+	}
+	75.1%,83.32%,91.64%{
+		transform:rotate(4deg);
+	}
+	79.16%,87.48%,95.8%{
+		transform:rotate(-4deg);
+	}
+}
+</style>
+<div class="bee">
+	<div class="wings"></div>
+	<div class="body"></div>
+</div>
+<!--______________________________bee wallpaper_________________________________________-->
+
+
+<h3>Display all the blogs containing the tag "{{blogstags}}": </h3>
+<div>
+{% for x in blogid %}
+<p><b> {{x[0]}}</b> </p>
+{% endfor %}
+</div>
+
+

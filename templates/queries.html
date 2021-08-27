@@ -1,0 +1,152 @@
+<P><a href="/home">home</a></P>
+<!--______________________________bee wallpaper_________________________________________-->
+<style>
+    body{
+	margin:0;
+	color:#444;
+	background:#f3c444;
+	font:300 18px/18px Roboto, sans-serif;
+}
+*,:after,:before{box-sizing:border-box}
+.pull-left{float:left}
+.pull-right{float:right}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+body{overflow:hidden}
+.bee{
+	top:50%;
+	left:50%;
+	margin:auto;
+	width:120px;
+	height:120px;
+	margin-top:-20px;
+	margin-left:-60px;
+	position:absolute;
+}
+.bee:before,
+.bee:after{
+	top:-30px;
+	width:12px;
+	height:12px;
+	content:'';
+	border-radius:50%;
+	position:absolute;
+	border:6px solid currentColor;
+	animation:eye 1s linear infinite;
+}
+.bee:before{left:45px}
+.bee:after{right:45px}
+.bee .body{
+	padding:10px;
+}
+.bee .body,.bee .body:before{
+	display:inline-block;
+	border:24px double transparent;
+	border-top-color:currentColor;
+	border-radius:50%;
+}
+.bee .body:before{
+	width:0;
+	height:0;
+	content:'';
+}
+.bee .wings{
+	top:-35px;
+	width:100%;
+	height:70px;
+	position:absolute;
+	animation:wing 1s linear infinite;
+}
+.bee .wings:before,
+.bee .wings:after{
+	top:50%;
+	content:'';
+	width:50px;
+	height:50px;
+	margin-top:-25px;
+	position:absolute;
+	border-radius:50%;
+	background-color:rgba(255,255,255,.65);
+}
+.bee .wings:before{
+	left:0;
+	transform:rotate(-45deg);
+	border-radius:50% 50% 0 50%;
+}
+.bee .wings:after{
+	right:0;
+	transform:rotate(45deg);
+	border-radius:50% 50% 50% 0;
+}
+@keyframes eye{
+	0%,50%,62.5%,87.5%{
+		transform:rotateX(0deg);
+	}
+	51%,63%,75%,100%{
+		transform:rotateX(90deg);
+	}
+}
+@keyframes wing{
+	0%,75%,100%{
+		transform:rotate(0deg);
+	}
+	75.1%,83.32%,91.64%{
+		transform:rotate(4deg);
+	}
+	79.16%,87.48%,95.8%{
+		transform:rotate(-4deg);
+	}
+}
+</style>
+<div class="bee">
+	<div class="wings"></div>
+	<div class="body"></div>
+</div>
+<!--______________________________bee wallpaper_________________________________________-->
+
+
+<p><h1><b><em><u>~Welcome to Phase 3~</em></b></u></h1>
+<br>
+<div>
+	<form method="post" action="/displayUsers">
+		<label><h3><b><em>List all the blogs of user X, such that all the comments are positive for these blogs:</b></em></h3></label>
+		<input type="text" placeholder="Enter Userid" name="userid" required><br><br>
+		<input type="submit" value="Submit">
+	</form>
+	</div>
+	<br>
+<div>
+	<em><h3>List the users who posted the most number of blogs on 2021-08-25:</h3></em>
+	<div>
+	<a class="btn btn-primary" href="/dateUsers/" role="button">DateUsers</a> <br><br></div>
+	</div>
+  <br>
+  
+<div>
+<h3>Display users who never commented</h3>
+<a class="btn btn-primary" href="/usersnevercomment/" role="button">Display Users</a> <br></div>
+<br><br>
+<div>
+<em><h3>Display all the blogs contains tag X</h3></em>
+	<form method="post" action="/blogcontaintag">
+    <p><h3><bold>Enter Tags:</bold></h3>
+    <input type="text" placeholder="Enter tag" name="blogstag" required></p>
+    <input type="submit" value="Submit">
+</form>
+</div>
+<br>
+
+<div>
+	<em><h3>List the users who are followed by both X and Y</h3></em>
+	<form method="post" action="/listFollowedUsers">
+		<p><h3><bold>Enter Follower #1:</bold></h3>
+		<input type="text" placeholder="Enter Follower #1" name="followerid_1" required></p>
+
+		<p><h3><bold>Enter Follower #2:</bold></h3>
+		<input type="text" placeholder="Enter Follower #2" name="followerid_2" required></p> 
+	
+		<p><input type="submit" value="Submit"></p>
+	</form>
+	</div>
+</p>
+

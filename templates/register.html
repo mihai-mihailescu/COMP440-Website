@@ -26,14 +26,11 @@
 <div class = loginform>
     <p style="text-align:center" class = "important">{{error}}</p>
     <form method="post" action="/register">
-        <label><bold>Username(e-mail):</bold></label><br>
+        <label><bold>Username:</bold></label><br>
+        <input type="text" placeholder="Enter username" name="username" value="{{username}}" required><br><br>
+
+        <label><bold>e-mail:</bold></label><br>
         <input type="email" placeholder="Enter email" name="email" value="{{email}}" required><br><br>
-    
-        <label><bold>First Name:</bold></label><br>
-        <input type="text" placeholder="Enter first name" name="first_name" value="{{first_name}}" required><br><br>
-    
-        <label><bold>Last Name:</bold></label><br>
-        <input type="text" placeholder="Enter last name" name="last_name" value="{{last_name}}" required><br><br>
     
         <label><bold>Password:</bold></label><br>
         <input id = "password" type="password" placeholder= "Password" name="password" required><br>
@@ -50,10 +47,9 @@
 <h1>Registration Successful</h1>
 <div class = loginform>
     <p style="text-align:center; color: greenyellow">{{error}}</p>
+    <p>User ID#: {{userid}}</p>
+    <p>Username: {{username}}</p>
     <p>Registered email: {{email}}</p>
-    <p>First Name: {{first_name}}</p>
-    <p>Last Name: {{first_name}}</p>
-    <p>Registration Date and Time: {{register_date}}</p>
 </div>
 {% endif %}
 {% endblock %}
