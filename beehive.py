@@ -280,7 +280,7 @@ def dateUsers():
         cursor = conn.cursor()
 
         ##### query by date#########
-        query = "select distinct userid from blogs where pdate = '2021-08-25' Having Max(blogid)"
+        query = "select userid from blogs where pdate = '2021-08-25' group by userid Having Max(blogid)"
         cursor.execute(query)
         userid = cursor.fetchall()
 
