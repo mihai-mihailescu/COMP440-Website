@@ -1,5 +1,4 @@
-
-<br>
+<P><a href="/home">home</a></P>
 <!--______________________________bee wallpaper_________________________________________-->
 <style>
     body{
@@ -106,23 +105,18 @@ body{overflow:hidden}
 <!--______________________________bee wallpaper_________________________________________-->
 
 
-<!-- <br><br>
-<div class="mb-3">
-    <label for="displayUsers" class="form-label"><h3>List all the blogs, such that all the comments are positive for these blogs.</h3></label>
-<a class="btn btn-primary" href="/displayUsers/" role="button">Display Users</a> <br><br>
-</div> -->
-
 <p><h1><b><em><u>~Welcome to Phase 3~</em></b></u></h1>
+<br>
 <div>
 	<form method="post" action="/displayUsers">
-		<label><h3><bold>Enter User:</bold></h3></label>
+		<label><h3><b><em>List all the blogs of user X, such that all the comments are positive for these blogs:</b></em></h3></label>
 		<input type="text" placeholder="Enter Userid" name="userid" required><br><br>
 		<input type="submit" value="Submit">
 	</form>
 	</div>
 	<br>
 <div>
-	<h3>List the users who posted the most number of blogs on 2021-08-25:</h3>
+	<em><h3>List the users who posted the most number of blogs on 2021-08-25:</h3></em>
 	<div>
 	<a class="btn btn-primary" href="/dateUsers/" role="button">DateUsers</a> <br><br></div>
 	</div>
@@ -133,16 +127,17 @@ body{overflow:hidden}
 <a class="btn btn-primary" href="/usersnevercomment/" role="button">Display Users</a> <br></div>
 <br><br>
 <div>
-<form method="post" action="/blogcontaintag">
+<em><h3>Display all the blogs contains tag X</h3></em>
+	<form method="post" action="/blogcontaintag">
     <p><h3><bold>Enter Tags:</bold></h3>
     <input type="text" placeholder="Enter tag" name="blogstag" required></p>
     <input type="submit" value="Submit">
 </form>
 </div>
-<br><br>
-
+<br>
 
 <div>
+	<em><h3>List the users who are followed by both X and Y</h3></em>
 	<form method="post" action="/listFollowedUsers">
 		<p><h3><bold>Enter Follower #1:</bold></h3>
 		<input type="text" placeholder="Enter Follower #1" name="followerid_1" required></p>
@@ -154,3 +149,4 @@ body{overflow:hidden}
 	</form>
 	</div>
 </p>
+
